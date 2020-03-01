@@ -36,21 +36,29 @@ service = build('sheets', 'v4', credentials=creds)
 
 sheet = service.spreadsheets()
 
-# 10 rows
-# 6 columns
-random_vals = [[random.randint(1,101) for i in range(6)] for j in range(0,10)]
+def clear_vals():
+  # Clear values first
+  request = sheet.values().clear(spreadsheetId = SAMPLE_SPREADSHEET_ID, range = SAMPLE_RANGE_NAME).execute()
 
-new_values = {
-  'values': random_vals
-}
-update = sheet.values().update(spreadsheetId = SAMPLE_SPREADSHEET_ID,
-                              range = SAMPLE_RANGE_NAME,
-                              valueInputOption='USER_ENTERED',
-                              body = new_values
-).execute()
+def write_random_vals():
+  # 10 rows
+  # 6 columns
+  random_vals = [[random.randint(1,101) for i in range(6)] for j in range(0,10)]
 
-update = sheet.values().update(spreadsheetId = SAMPLE_SPREADSHEET_ID,
-                              range = 'Sheet1!A1:F1',
-                              valueInputOption = 'USER_ENTERED',
-                              body = {'values': [[f'Field {i}' for i in range(6)]]}
-).execute()
+  new_values = {
+    'values': random_vals
+  }
+  update = sheet.values().update(spreadsheetId = SAMPLE_SPREADSHEET_ID,
+                                range = SAMPLE_RANGE_NAME,
+                                valueInputOption='USER_ENTERED',
+                                body = new_values
+  ).execute()
+
+  update = sheet.values().update(spreadsheetId = SAMPLE_SPREADSHEET_ID,
+                                range = 'Sheet1!A1:F1',
+                                valueInputOption = 'USER_ENTERED',
+                                body = {'values': [[f'Field {i}' for i in range(6)]]}
+  ).execute()
+
+clear_vals()
+write_random_vals()
